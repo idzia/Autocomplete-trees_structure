@@ -9,11 +9,14 @@ public class AutoComplete {
 
     private TrieDataNode root;
 
+    private static final char ROOT = '-';
+    private static final char END = '*';
+
     /**
      * Starts a new Trie with dummy root data "-"
      */
     public AutoComplete() {
-        root = new TrieDataNode('-');
+        root = new TrieDataNode(ROOT);
     }
 
     /**
@@ -28,7 +31,7 @@ public class AutoComplete {
             current.addChild(letter);
             current = current.getChild(letter);
         }
-        current.addChild('*');
+        current.addChild(END);
     }
 
     /**
@@ -62,8 +65,46 @@ public class AutoComplete {
      * @return true if the removal was successful
      */
     public boolean removeWord(String wordToRemove) {
-        // TODO -- Optional homework
-        return false;
+
+        TrieDataNode[] nodeArray = wordNodeArray(wordToRemove);
+
+        if (nodeArray == null) {
+            return false;
+        }
+        int lastIndex = nodeArray.length-1;
+
+        TrieDataNode lastNode = nodeArray[lastIndex];
+
+        while (lastNode.hasAChild() == false) {
+            lastIndex--;
+            TrieDataNode parent = nodeArray[lastIndex];
+            parent.getChildrenMap().remove(lastNode.getData());
+            lastNode = nodeArray[lastIndex];
+        }
+        return true;
+    }
+
+
+    public TrieDataNode[] wordNodeArray (String wordToRemove) {
+
+        TrieDataNode[] nodeArray = new TrieDataNode[wordToRemove.length()+1];
+        TrieDataNode current = root;
+
+        for (int i=0; i<nodeArray.length-1; i++) {
+            char letter = wordToRemove.charAt(i);
+
+            if (current.getChild(letter)==null) {
+                return null;
+            } else {
+
+                nodeArray[i] = current.getChild(letter);
+                current = current.getChild(letter);
+            }
+        }
+
+        nodeArray[wordToRemove.length()] = current.getChild(END);
+
+        return nodeArray;
     }
 
 }

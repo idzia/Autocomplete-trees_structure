@@ -71,8 +71,10 @@ class AutoCompleteTest {
     void remove_existingWord() {
         AutoComplete ac = new AutoComplete();
         ac.addWord("aReallyLongWord");
+        //ac.addWord("aReld");
 
         assertTrue(ac.removeWord("aReallyLongWord"));
+        //assertTrue(ac.removeWord("aReld"));
         assertEquals(0, ac.autoComplete("aReallyLongWord").size());
     }
 

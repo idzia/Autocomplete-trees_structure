@@ -33,6 +33,15 @@ public class TrieDataNode {
         return children.get(key);
     }
 
+    public HashMap<Character, TrieDataNode> getChildrenMap () {
+        return children;
+    }
+
+    public boolean hasAChild () {
+        return children.size()>0;
+    }
+
+
     public List<Character> getKeysList () {
         Set keys = children.keySet();
         List<Character> keysList = new ArrayList<Character>(keys);
